@@ -1,11 +1,20 @@
-pub fn add_tuple(a: (u32, u32, u32, u32), b: (u32, u32, u32, u32)) -> (u32, u32, u32, u32) {
-    (a.0 + b.0, a.1 + b.1, a.2 + b.2, a.3 + b.3)
+pub fn add_vec(a: &Vec<u32>, b: &Vec<u32>) -> Vec<u32> {
+    a.into_iter()
+        .zip(b.into_iter())
+        .map(|(c, d)| c + d)
+        .collect()
 }
 
-pub fn subtract_tuple(a: (u32, u32, u32, u32), b: (u32, u32, u32, u32)) -> (u32, u32, u32, u32) {
-    (a.0 - b.0, a.1 - b.1, a.2 - b.2, a.3 - b.3)
+pub fn subtract_vec(a: &Vec<u32>, b: &Vec<u32>) -> Vec<u32> {
+    a.into_iter()
+        .zip(b.into_iter())
+        .map(|(c, d)| c - d)
+        .collect()
 }
 
-pub fn sum_tuple(a: (u32, u32, u32, u32)) -> u32 {
-    a.0 + a.1 + a.2 + a.3
+pub fn is_less_than_or_equal(a: &Vec<u32>, b: &Vec<u32>) -> bool {
+    a.into_iter()
+        .zip(b.into_iter())
+        .map(|(c, d)| c <= d)
+        .fold(true, |acc, curr| acc && curr)
 }
