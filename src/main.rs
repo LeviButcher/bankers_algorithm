@@ -1,7 +1,6 @@
 extern crate bankers;
 use bankers::{bankers_algorithm, Process};
 
-use std::env;
 use std::fs;
 
 fn main() {
@@ -27,7 +26,7 @@ fn exocute(filename: &'static str) {
         })
         .collect();
 
-    let mut available: Vec<u32> = vec[0].to_vec();
+    let available: Vec<u32> = vec[0].to_vec();
     // remove first item (available line)
     vec.drain(0..1);
 
@@ -59,7 +58,7 @@ fn exocute(filename: &'static str) {
         i += 1;
     }
     // EXECUTE ALG
-    let mut result = bankers_algorithm(available, processes);
+    let result = bankers_algorithm(available, processes);
     // Test result
 
     if result.is_ok() {
