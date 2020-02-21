@@ -64,10 +64,15 @@ fn recursive_bankers_algorithm(
     let first_process: Process = processes.remove(0);
 
     // Process has available resources, GO TIME
-    if is_less_than_or_equal(&first_process.resources_needed(), &available) {
-        let available = add_vec(&available, &first_process.resources_allocated);
-        ran_processes.push(first_process);
-        return recursive_bankers_algorithm(available, processes, ran_processes, 0);
+    if is_less_than_or_equal(
+        &first_process.resources_allocated,
+        &first_process.resource_max,
+    ) {
+        if is_less_than_or_equal(&first_process.resources_needed(), &available) {
+            let available = add_vec(&available, &first_process.resources_allocated);
+            ran_processes.push(first_process);
+            return recursive_bankers_algorithm(available, processes, ran_processes, 0);
+        }
     }
 
     // Try again
