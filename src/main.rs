@@ -1,9 +1,8 @@
 extern crate bankers;
-use bankers::bankers_algorithm;
+use bankers::{bankers_algorithm, Process};
 
 use std::env;
 use std::fs;
-mod lib;
 
 fn main() {
     // Parse text files into bankers algorithms required structure
@@ -39,11 +38,12 @@ fn main() {
     let mut processes: Vec<Process> = Vec::new();
     i = 0;
     while i < half_count {
-        processes.push(Process::new(alloc[i], max[i]));
+        processes.push(Process::new(alloc[i].to_vec(), max[i].to_vec()));
         i += 1;
     }
     // EXECUTE ALG
-    bankers_algorithm(available, processes);
+    let mut result = bankers_algorithm(available, processes);
+    assert_eq!(true, result.is_ok());
 }
 fn mapper(filename: &str) -> Vec<Vec<u32>> {
     let dir = "src/BankerData/";

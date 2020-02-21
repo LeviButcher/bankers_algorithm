@@ -9,7 +9,7 @@ pub struct Process {
 
 impl Process {
     #[warn(dead_code)]
-    fn new(allocate: Vec<u32>, max: Vec<u32>) -> Process {
+    pub fn new(allocate: Vec<u32>, max: Vec<u32>) -> Process {
         Process {
             resource_max: max,
             resources_allocated: allocate,
