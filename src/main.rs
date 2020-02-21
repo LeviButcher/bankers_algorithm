@@ -9,21 +9,38 @@ fn main() {
     // Could run the parse of the file and bankers algorithm in threads, return bankers result from thread,
     // Then print the result
 
-    let mut flat_vec: Vec<Vec<u32>> = mapper("input1.txt");
-    let mut available: Vec<u32> = flat_vec[0].to_vec();
-    // remove first item (available line)
-    flat_vec.drain(0..1);
+    exocute("input1.txt");
+    exocute("input2.txt");
+    exocute("input3.txt");
+}
+fn exocute(filename: &'static str) {
+    let dir = "src/BankerData/";
+    let full_filename = format!("{}{}", dir, filename);
+    let input_file_str = fs::read_to_string(full_filename).expect("Error happened.");
 
-    let half_count = flat_vec.len() / 2;
+    let mut vec: Vec<Vec<u32>> = input_file_str
+        .lines()
+        .map(|line| {
+            line.split(char::is_whitespace)
+                .map(|num| num.parse().unwrap())
+                .collect()
+        })
+        .collect();
+
+    let mut available: Vec<u32> = vec[0].to_vec();
+    // remove first item (available line)
+    vec.drain(0..1);
+
+    let half_count = vec.len() / 2;
     let mut i = 0;
     let mut alloc: Vec<Vec<u32>> = Vec::new();
     let mut max: Vec<Vec<u32>> = Vec::new();
     let mut first_half = true;
-    while i < flat_vec.len() {
+    while i < vec.len() {
         if first_half {
-            alloc.push(flat_vec[i].to_vec());
+            alloc.push(vec[i].to_vec());
         } else {
-            max.push(flat_vec[i].to_vec());
+            max.push(vec[i].to_vec());
         }
         if i == half_count - 1 && first_half {
             first_half = false;
@@ -33,7 +50,7 @@ fn main() {
     // a couple tests
     assert_eq!(alloc.len(), max.len());
     // check length against input file length
-    assert_eq!(flat_vec.len() / 2, max.len());
+    assert_eq!(vec.len() / 2, max.len());
 
     let mut processes: Vec<Process> = Vec::new();
     i = 0;
@@ -43,24 +60,16 @@ fn main() {
     }
     // EXECUTE ALG
     let mut result = bankers_algorithm(available, processes);
-    assert_eq!(true, result.is_ok());
-    let mut unw = result.unwrap();
-    for process in unw {
-        println!("{}", process);
-    }
-}
-fn mapper(filename: &str) -> Vec<Vec<u32>> {
-    let dir = "src/BankerData/";
-    let filename = format!("{}{}", dir, filename);
-    let input_file_str = fs::read_to_string(filename).expect("Error happened.");
+    // Test result
 
-    let all_vec: Vec<Vec<u32>> = input_file_str
-        .lines()
-        .map(|line| {
-            line.split(char::is_whitespace)
-                .map(|num| num.parse().unwrap())
-                .collect()
-        })
-        .collect();
-    return all_vec;
+    if result.is_ok() {
+        let unwrapped = result.unwrap();
+        println!("\n\nfile :: {}", filename);
+        for process in unwrapped {
+            println!("{}", process);
+        }
+        println!("");
+    } else {
+        println!("\n\nfile :: {} :: No safe state exists\n\n", filename);
+    }
 }
