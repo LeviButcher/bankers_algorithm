@@ -68,7 +68,6 @@ fn exocute(filename: &'static str) {
         for process in unwrapped {
             println!("{}", process);
         }
-        println!("");
     } else {
         println!("\n\nfile :: {} :: No safe state exists\n\n", filename);
     }
