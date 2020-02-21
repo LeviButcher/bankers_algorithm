@@ -10,16 +10,9 @@ fn main() {
     // Could run the parse of the file and bankers algorithm in threads, return bankers result from thread,
     // Then print the result
 
-    //munger("input1.txt");
     let mut flat_vec: Vec<Vec<u32>> = mapper("input1.txt");
-
-    // ** OUTPUT ** //
-    // Process is one line in the input file
-    // vector max = [1,1,1,1]
-    // vector avail = [1,1,1,1]
-
     let mut available: Vec<u32> = flat_vec[0].to_vec();
-    // remove first item
+    // remove first item (available line)
     flat_vec.drain(0..1);
 
     let half_count = flat_vec.len() / 2;
@@ -39,18 +32,17 @@ fn main() {
         i += 1;
     }
     // a couple tests
-    // check length against input file length
     assert_eq!(alloc.len(), max.len());
+    // check length against input file length
     assert_eq!(flat_vec.len() / 2, max.len());
 
-    // processes = Vec<Process>
-    // available = Vec<u32>
     let mut processes: Vec<Process> = Vec::new();
     i = 0;
     while i < half_count {
         processes.push(Process::new(alloc[i], max[i]));
         i += 1;
     }
+    // EXECUTE ALG
     bankers_algorithm(available, processes);
 }
 fn mapper(filename: &str) -> Vec<Vec<u32>> {
