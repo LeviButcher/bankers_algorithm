@@ -38,14 +38,16 @@ fn main() {
     let mut processes: Vec<Process> = Vec::new();
     i = 0;
     while i < half_count {
-        processes.push(Process::new(alloc[i].to_vec(), max[i].to_vec()));
+        processes.push(Process::new(i as u32, alloc[i].to_vec(), max[i].to_vec()));
         i += 1;
     }
     // EXECUTE ALG
     let mut result = bankers_algorithm(available, processes);
     assert_eq!(true, result.is_ok());
     let mut unw = result.unwrap();
-    println!("{:?}", unw);
+    for process in unw {
+        println!("{}", process);
+    }
 }
 fn mapper(filename: &str) -> Vec<Vec<u32>> {
     let dir = "src/BankerData/";

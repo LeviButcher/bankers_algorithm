@@ -1,5 +1,6 @@
 mod utils;
-use utils::{add_vec, is_less_than_or_equal, subtract_vec};
+use std::fmt;
+use utils::{add_vec, is_less_than_or_equal, join_vec, subtract_vec};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Process {
@@ -20,6 +21,19 @@ impl Process {
 
     fn resources_needed(&self) -> Vec<u32> {
         subtract_vec(&self.resource_max, &self.resources_allocated)
+    }
+}
+
+impl fmt::Display for Process {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "| id: {} | allocated: {} | max: {} | needed: {} |",
+            self.id,
+            join_vec(",", &self.resources_allocated),
+            join_vec(",", &self.resource_max),
+            join_vec(",", &self.resources_needed())
+        )
     }
 }
 
@@ -69,7 +83,7 @@ mod test {
     fn bankers_algorithm_should_return_correct_order() {
         let available = vec![5, 7, 7, 8];
 
-        let processes = vec![Process::new(vec![0, 0, 0, 0], vec![4, 5, 7, 8])];
+        let processes = vec![Process::new(0, vec![0, 0, 0, 0], vec![4, 5, 7, 8])];
 
         let result = bankers_algorithm(available, processes.clone());
         assert_eq!(result.unwrap(), processes);
@@ -80,18 +94,18 @@ mod test {
         let available = vec![1, 5, 2, 0];
 
         let processes = vec![
-            Process::new(vec![0, 0, 1, 2], vec![0, 0, 1, 2]),
-            Process::new(vec![1, 0, 0, 0], vec![1, 7, 5, 0]),
-            Process::new(vec![1, 3, 5, 4], vec![2, 3, 5, 6]),
-            Process::new(vec![0, 6, 3, 2], vec![0, 6, 5, 2]),
-            Process::new(vec![0, 0, 1, 4], vec![0, 6, 5, 6]),
+            Process::new(0, vec![0, 0, 1, 2], vec![0, 0, 1, 2]),
+            Process::new(1, vec![1, 0, 0, 0], vec![1, 7, 5, 0]),
+            Process::new(2, vec![1, 3, 5, 4], vec![2, 3, 5, 6]),
+            Process::new(3, vec![0, 6, 3, 2], vec![0, 6, 5, 2]),
+            Process::new(4, vec![0, 0, 1, 4], vec![0, 6, 5, 6]),
         ];
         let expected_result: Result<Vec<Process>, String> = Result::Ok(vec![
-            Process::new(vec![0, 0, 1, 2], vec![0, 0, 1, 2]),
-            Process::new(vec![1, 3, 5, 4], vec![2, 3, 5, 6]),
-            Process::new(vec![0, 6, 3, 2], vec![0, 6, 5, 2]),
-            Process::new(vec![0, 0, 1, 4], vec![0, 6, 5, 6]),
-            Process::new(vec![1, 0, 0, 0], vec![1, 7, 5, 0]),
+            Process::new(0, vec![0, 0, 1, 2], vec![0, 0, 1, 2]),
+            Process::new(2, vec![1, 3, 5, 4], vec![2, 3, 5, 6]),
+            Process::new(3, vec![0, 6, 3, 2], vec![0, 6, 5, 2]),
+            Process::new(4, vec![0, 0, 1, 4], vec![0, 6, 5, 6]),
+            Process::new(1, vec![1, 0, 0, 0], vec![1, 7, 5, 0]),
         ]);
 
         let result = bankers_algorithm(available, processes);
@@ -104,8 +118,8 @@ mod test {
         let available = vec![2, 2, 2, 2];
 
         let processes = vec![
-            Process::new(vec![0, 1, 0, 0], vec![3, 3, 3, 3]),
-            Process::new(vec![2, 0, 0, 0], vec![4, 4, 4, 4]),
+            Process::new(0, vec![0, 1, 0, 0], vec![3, 3, 3, 3]),
+            Process::new(1, vec![2, 0, 0, 0], vec![4, 4, 4, 4]),
         ];
         let expected_message = "No safe state exists";
         let result = bankers_algorithm(available, processes).unwrap_err();
@@ -126,18 +140,18 @@ mod test {
         let available = vec![3, 3, 2];
 
         let processes = vec![
-            Process::new(vec![0, 1, 0], vec![7, 5, 3]),
-            Process::new(vec![2, 0, 0], vec![3, 2, 2]),
-            Process::new(vec![3, 0, 2], vec![9, 0, 2]),
-            Process::new(vec![2, 1, 1], vec![2, 2, 2]),
-            Process::new(vec![0, 0, 2], vec![4, 3, 3]),
+            Process::new(0, vec![0, 1, 0], vec![7, 5, 3]),
+            Process::new(1, vec![2, 0, 0], vec![3, 2, 2]),
+            Process::new(2, vec![3, 0, 2], vec![9, 0, 2]),
+            Process::new(3, vec![2, 1, 1], vec![2, 2, 2]),
+            Process::new(4, vec![0, 0, 2], vec![4, 3, 3]),
         ];
         let expected_result: Result<Vec<Process>, String> = Result::Ok(vec![
-            Process::new(vec![2, 0, 0], vec![3, 2, 2]),
-            Process::new(vec![2, 1, 1], vec![2, 2, 2]),
-            Process::new(vec![0, 0, 2], vec![4, 3, 3]),
-            Process::new(vec![0, 1, 0], vec![7, 5, 3]),
-            Process::new(vec![3, 0, 2], vec![9, 0, 2]),
+            Process::new(1, vec![2, 0, 0], vec![3, 2, 2]),
+            Process::new(3, vec![2, 1, 1], vec![2, 2, 2]),
+            Process::new(4, vec![0, 0, 2], vec![4, 3, 3]),
+            Process::new(0, vec![0, 1, 0], vec![7, 5, 3]),
+            Process::new(2, vec![3, 0, 2], vec![9, 0, 2]),
         ]);
 
         let result = bankers_algorithm(available, processes);
@@ -149,7 +163,7 @@ mod test {
     fn bankers_algorithm_really_large_resource_not_enough_of_others_should_fail() {
         let available = vec![20, 2, 2, 2];
 
-        let processes = vec![Process::new(vec![0, 1, 0, 0], vec![2, 3, 3, 3])];
+        let processes = vec![Process::new(0, vec![0, 1, 0, 0], vec![2, 3, 3, 3])];
         let expected_message = "No safe state exists";
         let result = bankers_algorithm(available, processes).unwrap_err();
 
