@@ -267,7 +267,51 @@ mod test {
 
         assert_eq!(expected_result, result);
     }
+    #[test]
+    fn bankers_algorithm_third_almond_data_should_return_expected() {
+        let available = vec![2, 0, 2, 0];
 
+        let processes = vec![
+            Process::new(0, vec![2, 0, 0, 0], vec![3, 2, 0, 0]),
+            Process::new(1, vec![0, 1, 0, 0], vec![0, 2, 1, 2]),
+            Process::new(2, vec![1, 0, 1, 1], vec![4, 1, 1, 1]),
+            Process::new(3, vec![1, 1, 0, 1], vec![1, 1, 1, 1]),
+        ];
+        let expected_result: Result<Vec<RanProcess>, String> = Result::Ok(vec![
+            RanProcess::new(
+                3,
+                vec![1, 1, 0, 1],
+                vec![1, 1, 1, 1],
+                vec![0, 0, 1, 0],
+                vec![3, 1, 2, 1],
+            ),
+            RanProcess::new(
+                2,
+                vec![1, 0, 1, 1],
+                vec![4, 1, 1, 1],
+                vec![3, 1, 0, 0],
+                vec![4, 1, 3, 2],
+            ),
+            RanProcess::new(
+                1,
+                vec![0, 1, 0, 0],
+                vec![0, 2, 1, 2],
+                vec![0, 1, 1, 2],
+                vec![4, 2, 3, 2],
+            ),
+            RanProcess::new(
+                0,
+                vec![2, 0, 0, 0],
+                vec![3, 2, 0, 0],
+                vec![1, 2, 0, 0],
+                vec![6, 2, 3, 2],
+            ),
+        ]);
+
+        let result = bankers_algorithm(available, processes);
+
+        assert_eq!(expected_result, result);
+    }
     #[test]
     fn bankers_algorithm_really_large_resource_not_enough_of_others_should_fail() {
         let available = vec![20, 2, 2, 2];

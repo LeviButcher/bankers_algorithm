@@ -63,10 +63,11 @@ fn exocute(filename: &'static str) {
 
     if result.is_ok() {
         let unwrapped = result.unwrap();
-        println!("\n\nfile :: {}", filename);
+        println!("\nfile :: {}", filename);
         for process in unwrapped {
             println!("{}", process);
         }
+        println!("\n");
     } else {
         println!("\n\nfile :: {} :: No safe state exists\n\n", filename);
     }
