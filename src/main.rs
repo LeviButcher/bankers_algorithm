@@ -44,6 +44,8 @@ fn main() {
     // EXECUTE ALG
     let mut result = bankers_algorithm(available, processes);
     assert_eq!(true, result.is_ok());
+    let mut unw = result.unwrap();
+    println!("{:?}", unw);
 }
 fn mapper(filename: &str) -> Vec<Vec<u32>> {
     let dir = "src/BankerData/";

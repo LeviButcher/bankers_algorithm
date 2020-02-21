@@ -3,14 +3,16 @@ use utils::{add_vec, is_less_than_or_equal, subtract_vec};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Process {
+    id: u32,
     resources_allocated: Vec<u32>,
     resource_max: Vec<u32>,
 }
 
 impl Process {
     #[warn(dead_code)]
-    pub fn new(allocate: Vec<u32>, max: Vec<u32>) -> Process {
+    pub fn new(id: u32, allocate: Vec<u32>, max: Vec<u32>) -> Process {
         Process {
+            id: id,
             resource_max: max,
             resources_allocated: allocate,
         }
