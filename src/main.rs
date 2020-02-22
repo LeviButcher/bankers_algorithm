@@ -8,11 +8,11 @@ fn main() {
     // Could run the parse of the file and bankers algorithm in threads, return bankers result from thread,
     // Then print the result
 
-    exocute("input1.txt");
-    exocute("input2.txt");
-    exocute("input3.txt");
+    execute("input1.txt");
+    execute("input2.txt");
+    execute("input3.txt");
 }
-fn exocute(filename: &'static str) {
+fn execute(filename: &'static str) {
     let dir = "src/BankerData/";
     let full_filename = format!("{}{}", dir, filename);
     let input_file_str = fs::read_to_string(full_filename).expect("Error happened.");
@@ -54,7 +54,10 @@ fn exocute(filename: &'static str) {
     let mut processes: Vec<Process> = Vec::new();
     i = 0;
     while i < half_count {
-        processes.push(Process::new(i as u32, alloc[i].to_vec(), max[i].to_vec()));
+        processes.push(
+            Process::new(i as u32, alloc[i].to_vec(), max[i].to_vec())
+                .expect("Failed to create Process"),
+        );
         i += 1;
     }
     // EXECUTE ALG
